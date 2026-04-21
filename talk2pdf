@@ -1,0 +1,29 @@
+#first imports this things 
+# pip install streamlit langchain  langchain-community langchain-ollama lanchain-groq pdfplumber  python-dotnev
+
+
+from langchain_community.document_loaders import PDFPlumberLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_ollama import OllamaEmbeddings
+def load_pdf(file_path):
+    loader = PDFPlumberLoader(file_path)
+    return loader.load()
+#Step2: Chunking
+
+
+def create_chunks(documents):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=1000,
+        chunk_overlap=200
+    )
+    return text_splitter.split_documents(documents)
+#Step3 : Embeddings
+
+def get_embedding_model(model_name):
+    return OllamaEmbeddings(model=model_name)
+
+
+documents = load_pdf("Getting started with OneDrive.pdf")
+print(len(documents)) 
+chunks = create_chunks(documents)
+print(len(chunks))
