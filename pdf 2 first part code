@@ -1,0 +1,41 @@
+from langchain_community.document_loaders import PDFPlumberLoader
+
+# from langchain_community.embeddings import HuggingFaceEmbeddings
+
+def load_pdf(file_path):
+    loader = PDFPlumberLoader(file_path)
+    return loader.load()
+
+#Step2: Chunking
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+def create_chunks(documents):
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=500, # 100 nahi kiya barna overlapping hoti
+        chunk_overlap=200
+    )
+    return text_splitter.split_documents(documents)
+
+#Step3 : Embeddings
+
+from langchain_ollama import OllamaEmbeddings
+def get_embedded_model(model_name):
+    return OllamaEmbeddings(model = model_name)
+
+
+documents = load_pdf("Unit -1 notes CS601 (ML) (1).pdf")
+print(len(documents)) 
+chunks = create_chunks(documents)
+print(len(chunks))
+
+
+# def get_embedding_model(model_name = None):
+# return HuggingFaceEmbedding()
+
+
+documents = load_pdf("Unit -1 notes CS601 (ML) (1).pdf")
+print(len(documents))
+
+
+chunks = create_chunks(documents)
+print(len(chunks))
